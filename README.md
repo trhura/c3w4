@@ -20,7 +20,7 @@ testX <- read.csv(file.path(getwd(), "UCI HAR Dataset/test/X_test.txt"),
 mergedX <- rbind(trainX, testX)
 ```
 2. Extracts only the measurements on the mean and standard deviation for each measurement. 
-```
+```R
 # extract features names from file
 features <- 
     readLines(file.path(getwd(), "UCI HAR Dataset/features.txt")) %>%
@@ -31,7 +31,7 @@ features <-
 extractedX <- mergedX[, grep("-(std|mean)\\(\\)", features)]
 ```
 3. Uses descriptive activity names to name the activities in the data set
-```
+```R
 # extract activity factors from file
 activities <-  
     readLines(file.path(getwd(), "UCI HAR Dataset/activity_labels.txt")) %>%
@@ -46,11 +46,11 @@ mergedY <- c(trainY, testY) %>% sapply(function(x) activities[as.numeric(x)])
     
 ```
 4. Appropriately labels the data set with descriptive variable names. 
-```
+```R
 names(extractedX) <- features[grep("-(std|mean)\\(\\)", features)]
 ```
 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-```
+```R
 extractedX  %>% 
     mutate(activity=mergedY, subject=mergedSub, .before="tBodyAcc-mean()-X") %>%
     group_by(activity, subject) %>%
